@@ -1,0 +1,23 @@
+behaviors:
+  Jumper:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 256          # Verhoogd: stabieler leren van kleine straffen
+      buffer_size: 4096         # Verhoogd: meer ervaringen vergelijken voordat hij aanpast
+      learning_rate: 1.0e-4     # Verlaagd: voorzichtiger verfijnen van de sprongtiming
+      beta: 1.0e-2              # Verhoogd: dwingt hem om die Z-as echt te gaan gebruiken
+      epsilon: 0.2
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate_schedule: linear
+    network_settings:
+      normalize: true           # Aangezet: helpt bij het verwerken van verschillende afstanden (X en Z)
+      hidden_units: 128
+      num_layers: 2
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    max_steps: 1000000          # Iets meer tijd voor die laatste 10% perfectie
+    time_horizon: 128           # Verhoogd: kijkt verder vooruit (handig voor die naderende balk)
+    summary_freq: 2000
