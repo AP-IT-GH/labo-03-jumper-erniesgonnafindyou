@@ -63,12 +63,17 @@ public class jumper : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
         // 1. SPRINGEN: Directe velocity override voor instant reactie
-        if (actions.DiscreteActions[0] == 1 && isGrounded)
+        if (actions.DiscreteActions[0] == 1)
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpVelocity, rb.linearVelocity.z);
-            isGrounded = false;
-
+            // De straf gebeurt nu bij ELKE poging tot springen (elke frame dat de actie 1 is)
             AddReward(-0.05f);
+
+            // De feitelijke fysieke sprong gebeurt alleen als de agent op de grond staat
+            if (isGrounded)
+            {
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpVelocity, rb.linearVelocity.z);
+                isGrounded = false;
+            }
         }
 
         // 2. Z-AS BEWEGING: Sneller maken
@@ -77,7 +82,10 @@ public class jumper : Agent
         else if (actions.DiscreteActions[1] == 2) zInput = -1f;
 
         float zDist = Mathf.Abs(bonus.transform.localPosition.z - transform.localPosition.z);
-        AddReward(-0.001f * zDist);
+        if (zDist < 0.5f) 
+        {
+            AddReward(0.005f); // Beloning voor 'on target' zijn
+        }
         
         // Gebruik Rigidbody voor verplaatsing zodat het matcht met de physics
         Vector3 move = new Vector3(0, 0, zInput * moveSpeed);
@@ -100,7 +108,7 @@ public class jumper : Agent
         if ((direction == 1 && obstacle.transform.localPosition.x > 11f) || 
             (direction == -1 && obstacle.transform.localPosition.x < -11f))
         {
-            AddReward(0.5f);
+            AddReward(0.8f);
             EndEpisode();
         }
 

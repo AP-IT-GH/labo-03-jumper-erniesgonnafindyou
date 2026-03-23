@@ -2,22 +2,26 @@ behaviors:
   Jumper:
     trainer_type: ppo
     hyperparameters:
-      batch_size: 256          # Verhoogd: stabieler leren van kleine straffen
-      buffer_size: 4096         # Verhoogd: meer ervaringen vergelijken voordat hij aanpast
-      learning_rate: 1.0e-4     # Verlaagd: voorzichtiger verfijnen van de sprongtiming
-      beta: 1.0e-2              # Verhoogd: dwingt hem om die Z-as echt te gaan gebruiken
+      batch_size: 512          # Groter voor stabielere gradiënten
+      buffer_size: 10240        # Veel groter: verzamel meer ervaring voor een update
+      learning_rate: 1.0e-4     
+      beta: 5.0e-3              # Verlaagd: hij mag nu iets meer gaan 'exploiten' ipv 'exploren'
       epsilon: 0.2
       lambd: 0.95
       num_epoch: 3
       learning_rate_schedule: linear
     network_settings:
-      normalize: true           # Aangezet: helpt bij het verwerken van verschillende afstanden (X en Z)
-      hidden_units: 128
+      normalize: true           
+      hidden_units: 256         # Verhoogd: geef het brein iets meer capaciteit voor de Z-navigatie
       num_layers: 2
     reward_signals:
       extrinsic:
         gamma: 0.99
         strength: 1.0
-    max_steps: 1000000          # Iets meer tijd voor die laatste 10% perfectie
-    time_horizon: 128           # Verhoogd: kijkt verder vooruit (handig voor die naderende balk)
+      # OPTIONEEL: Voeg Curiosity toe als hij de bonus op de Z-as nog te vaak negeert
+      # gail:
+      #   strength: 0.01
+      #   demo_path: Demos/PerfectJump.demo
+    max_steps: 2000000          # Gun hem de tijd om de perfecte timing te vinden
+    time_horizon: 128           
     summary_freq: 2000

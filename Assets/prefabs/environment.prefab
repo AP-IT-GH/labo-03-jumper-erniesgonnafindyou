@@ -156,9 +156,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Sensors.RayPerceptionSensorComponent3D
   m_SensorName: RayPerceptionSensor
-  m_DetectableTags: []
+  m_DetectableTags:
+  - Obstacle
   m_RaysPerDirection: 3
-  m_MaxRayDegrees: 70
+  m_MaxRayDegrees: 30
   m_SphereCastRadius: 0.5
   m_RayLength: 20
   m_RayLayerMask:
@@ -233,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.DecisionRequester
-  DecisionPeriod: 5
+  DecisionPeriod: 1
   TakeActionsBetweenDecisions: 1
 --- !u!1 &1970719627686157642
 GameObject:
